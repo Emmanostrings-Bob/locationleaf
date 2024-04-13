@@ -83,11 +83,10 @@ const App = () => {
     iconSize: [38, 38],
   });
 
-  // Custom hook to set the map view to user's location
   const GoToLocation = ({ coords }) => {
     const map = useMap();
-    map.flyTo(coords, 15, {
-      duration: 2, // Transition duration in seconds
+    map.flyTo(coords, 18, {
+      duration: 2, 
     });
     return null;
   };
@@ -132,7 +131,7 @@ const App = () => {
             </Marker>
             <Circle
               center={[userLocation.latitude, userLocation.longitude]}
-              radius={userLocation.accuracy * 0.02} // Use accuracy as radius
+              radius={100} 
               fillColor="red"
               fillOpacity={0.3}
               stroke={false}
@@ -146,4 +145,6 @@ const App = () => {
 };
 
 export default App;
+
+
 
