@@ -156,7 +156,7 @@ const App = () => {
       (position) => {
         const { latitude, longitude, accuracy } = position.coords;
         setUserLocation({ latitude, longitude, accuracy });
-        setTrackingStarted(true); // Set trackingStarted to true after the first successful location fetch
+        setTrackingStarted(true);
       },
       (error) => {
         alert("Failed to get current location. Please try again later.");
@@ -167,7 +167,6 @@ const App = () => {
 
   useEffect(() => {
     let watchId;
-
     if (trackingStarted) {
       watchId = navigator.geolocation.watchPosition(
         (position) => {
@@ -179,18 +178,19 @@ const App = () => {
         },
         {
           enableHighAccuracy: true,
-          timeout: 5000,
           maximumAge: 0,
+          timeout: 5000,
         }
       );
     }
-
     return () => {
-      if (watchId) {
-        navigator.geolocation.clearWatch(watchId);
-      }
+      if (watchId) navigator.geolocation.clearWatch(watchId);
     };
   }, [trackingStarted]);
+
+  const changeMapMode = (mode) => {
+    setMapMode(mode);
+  };
 
   const renderTileLayer = () => {
     switch (mapMode) {
@@ -220,29 +220,21 @@ const App = () => {
     }
   };
 
-  const changeMapMode = (mode) => {
-    setMapMode(mode);
-  };
-
   return (
     <div className="App">
-      <div className="map-controls">
-        <div className="get-location-button">
-          <button className="button" onClick={getLocation}>
-            Get My Location
-          </button>
-        </div>
-        <div className="map-modes">
-          <button className="button" onClick={() => changeMapMode("default")}>
-            Default Mode
-          </button>
-          <button className="button" onClick={() => changeMapMode("satellite")}>
-            Satellite Mode
-          </button>
-          <button className="button" onClick={() => changeMapMode("dark")}>
-            Dark Mode
-          </button>
-        </div>
+      <div className="get-location-button">
+        <button className="button" onClick={getLocation}>
+          Get My Location
+        </button>
+        <button className="button" onClick={() => changeMapMode("default")}>
+          Default Mode
+        </button>
+        <button className="button" onClick={() => changeMapMode("satellite")}>
+          Satellite Mode
+        </button>
+        <button className="button" onClick={() => changeMapMode("dark")}>
+          Dark Mode
+        </button>
       </div>
       <MapContainer center={[0, 0]} zoom={2} scrollWheelZoom={false}>
         {renderTileLayer()}
@@ -258,7 +250,7 @@ const App = () => {
             </Marker>
             <Circle
               center={[userLocation.latitude, userLocation.longitude]}
-              radius={userLocation.accuracy} 
+              radius={100}
               fillColor="red"
               fillOpacity={0.3}
               stroke={false}
@@ -272,6 +264,8 @@ const App = () => {
 };
 
 export default App;
+
+
 
 
 
